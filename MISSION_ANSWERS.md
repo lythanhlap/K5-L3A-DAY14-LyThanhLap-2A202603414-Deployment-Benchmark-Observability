@@ -235,9 +235,18 @@ Ghi chú: `main.py` của stack này chưa thực sự dùng Redis/Qdrant (chỉ
 
 ### Exercise 3.1 / 3.2: Deploy
 
-- Nền tảng chính: _(điền sau CP6 — Railway hoặc Render)_
-- Public URL: _(điền sau CP6)_
-- Kết quả 4 lệnh tự kiểm ở CP6 (`/health` 200, `/ready` 200, `/ask` không key 401, có key 200): _(điền sau CP6)_
+- Nền tảng chính: **Railway** — deploy `06-lab-complete/` bằng `railway up` (builder `DOCKERFILE` theo `railway.toml`), thêm service Redis trong cùng project; chi tiết trong [DEPLOYMENT.md](DEPLOYMENT.md)
+- Public URL: https://glistening-creation-production.up.railway.app
+- Kết quả 4 lệnh tự kiểm ở CP6:
+
+  | Lệnh | Mã HTTP |
+  |---|---|
+  | `GET /health` | 200 |
+  | `GET /ready` | 200 |
+  | `POST /ask` không có key | 401 |
+  | `POST /ask` có key | 200 |
+
+- Lỗi gặp khi deploy: lần đầu `/ready` trả 503 vì `REDIS_URL` của agent tham chiếu sai nên Railway điền chuỗi rỗng. Đặt lại `REDIS_URL=${{Redis.REDIS_URL}}` (trỏ tới `redis.railway.internal:6379`) thì `/ready` trả 200.
 - Screenshot: `screenshots/dashboard.png`, `screenshots/running.png`, `screenshots/test.png`
 
 ### So sánh `railway.toml` và `render.yaml` (trong `03-cloud-deployment/`)

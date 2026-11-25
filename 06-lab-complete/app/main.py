@@ -1,7 +1,6 @@
 """
 Production AI Agent — Part 6 Final Project
 """
-import asyncio
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 import json
@@ -130,11 +129,11 @@ def ready():
 
 
 @app.post("/ask")
-async def ask(body: AskRequest, api_key: str = Depends(verify_api_key)):
+def ask(body: AskRequest, api_key: str = Depends(verify_api_key)):
     check_rate_limit(api_key)
     check_budget()
 
-    answer = await asyncio.to_thread(llm_ask, body.question)
+    answer = llm_ask(body.question)
     input_tokens = max(1, len(body.question) // 4)
     output_tokens = max(1, len(answer) // 4)
     cost_usd = record_cost(input_tokens, output_tokens)
